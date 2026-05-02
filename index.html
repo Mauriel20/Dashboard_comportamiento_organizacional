@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard — Cambio Organizacional · Pollos Cyro's</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Source+Sans+3:ital,wght@0,300;0,400;0,600;0,700;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f7f6f3;
+    --surface: #ffffff;
+    --surface2: #f0eeeb;
+    --border: #d0ccc6;
+    --accent: #1a1a1a;
+    --accent2: #4a4a4a;
+    --accent3: #777;
+    --text: #1a1a1a;
+    --muted: #666;
+    --font-display: 'Playfair Display', serif;
+    --font-body: 'Source Sans 3', sans-serif;
+    --font-mono: 'DM Mono', monospace;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    font-size: 14px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* ─── HEADER ─────────────────────────────────────────── */
+  header {
+    border-bottom: 1px solid var(--border);
+    padding: 2rem 2.5rem 1.5rem;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .brand-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: #1a1a1a;
+    color: #f7f6f3;
+    padding: 0.3rem 0.85rem;
+    border-radius: 3px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 0.75rem;
+    font-family: var(--font-mono);
+  }
+
+  h1 {
+    font-family: var(--font-display);
+    font-size: clamp(2.2rem, 5vw, 3.8rem);
+    letter-spacing: 0.04em;
+    line-height: 1;
+    color: var(--text);
+  }
+
+  h1 span { color: #4a4a4a; }
+
+  .header-meta {
+    text-align: right;
+    color: var(--muted);
+    font-size: 12px;
+    font-family: var(--font-mono);
+    line-height: 1.8;
+  }
+
+  /* ─── LAYOUT ──────────────────────────────────────────── */
+  main {
+    padding: 2rem 2.5rem 4rem;
+    display: grid;
+    gap: 1.5rem;
+    grid-template-columns: repeat(12, 1fr);
+  }
+
+  /* ─── STAT CARDS ──────────────────────────────────────── */
+  .stat-row {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+  }
+
+  .stat-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.4rem 1.5rem;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+
+  .stat-card:hover { border-color: #1a1a1a; }
+
+  .stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    border-radius: 12px 12px 0 0;
+  }
+
+  .stat-card.yellow::before { background: #1a1a1a; }
+  .stat-card.orange::before { background: #555; }
+  .stat-card.teal::before   { background: #888; }
+  .stat-card.purple::before { background: #bbb; }
+
+  .stat-label {
+    font-size: 10px;
+    font-family: var(--font-mono);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--muted);
+    margin-bottom: 0.6rem;
+  }
+
+  .stat-value {
+    font-family: var(--font-display);
+    font-size: 3rem;
+    line-height: 1;
+    color: var(--text);
+    margin-bottom: 0.25rem;
+  }
+
+  .stat-card.yellow .stat-value { color: #1a1a1a; }
+  .stat-card.orange .stat-value { color: #333; }
+  .stat-card.teal   .stat-value { color: #555; }
+  .stat-card.purple .stat-value { color: #777; }
+
+  .stat-sub {
+    font-size: 11px;
+    color: var(--muted);
+  }
+
+  /* ─── SECTION TITLE ───────────────────────────────────── */
+  .section-title {
+    grid-column: 1 / -1;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-top: 0.5rem;
+  }
+
+  .section-title h2 {
+    font-family: var(--font-display);
+    font-size: 1.4rem;
+    letter-spacing: 0.06em;
+    color: var(--text);
+  }
+
+  .section-title .line {
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  .section-title .tag {
+    font-size: 10px;
+    font-family: var(--font-mono);
+    color: var(--muted);
+    border: 1px solid var(--border);
+    padding: 0.2rem 0.6rem;
+    border-radius: 4px;
+  }
+
+  /* ─── CHART PANELS ────────────────────────────────────── */
+  .panel {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem;
+  }
+
+  .panel-title {
+    font-size: 11px;
+    font-family: var(--font-mono);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    margin-bottom: 1.25rem;
+  }
+
+  /* Likert bar chart */
+  .likert-chart { display: flex; flex-direction: column; gap: 0.85rem; }
+
+  .likert-row { display: flex; flex-direction: column; gap: 0.35rem; }
+
+  .likert-label {
+    font-size: 11.5px;
+    color: var(--text);
+    font-weight: 500;
+    line-height: 1.3;
+  }
+
+  .likert-bar-wrap {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  .likert-bar-bg {
+    flex: 1;
+    height: 28px;
+    background: var(--surface2);
+    border-radius: 6px;
+    overflow: hidden;
+    display: flex;
+  }
+
+  .likert-seg {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: 600;
+    color: rgba(0,0,0,0.7);
+    transition: width 1.2s cubic-bezier(.4,0,.2,1);
+    white-space: nowrap;
+    overflow: hidden;
+  }
+
+  .seg-ta  { background: #1a1a1a; color: #f7f6f3 !important; }
+  .seg-da  { background: #555; color: #f7f6f3 !important; }
+  .seg-n   { background: #999; color: #fff !important; }
+  .seg-ed  { background: #ccc; color: #1a1a1a !important; }
+  .seg-ted { background: #e8e5e0; color: #1a1a1a !important; }
+
+  .likert-pct {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--muted);
+    min-width: 50px;
+    text-align: right;
+  }
+
+  /* Donut */
+  .donut-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem;
+  }
+
+  .donut-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .donut-wrap { position: relative; width: 90px; height: 90px; }
+  .donut-wrap svg { width: 90px; height: 90px; }
+
+  .donut-center {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-display);
+    font-size: 1.4rem;
+  }
+
+  .donut-label {
+    font-size: 10.5px;
+    color: var(--muted);
+    text-align: center;
+    line-height: 1.3;
+    max-width: 90px;
+  }
+
+  /* Bar horizontal simple */
+  .hbar-chart { display: flex; flex-direction: column; gap: 0.75rem; }
+
+  .hbar-row { display: flex; flex-direction: column; gap: 0.25rem; }
+
+  .hbar-label {
+    font-size: 11.5px;
+    color: var(--text);
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .hbar-label span { color: var(--muted); font-family: var(--font-mono); font-size: 11px; }
+
+  .hbar-bg {
+    width: 100%;
+    height: 22px;
+    background: var(--surface2);
+    border-radius: 5px;
+    overflow: hidden;
+  }
+
+  .hbar-fill {
+    height: 100%;
+    border-radius: 5px;
+    transition: width 1.2s cubic-bezier(.4,0,.2,1);
+  }
+
+  /* Legend */
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1rem;
+    margin-bottom: 1.1rem;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 10.5px;
+    color: var(--muted);
+  }
+
+  .legend-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  /* Interview panel */
+  .interview-panel {
+    grid-column: 1 / -1;
+  }
+
+  .interview-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+  }
+
+  .interview-card {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.1rem 1.25rem;
+    position: relative;
+  }
+
+  .interview-card .q-tag {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: #1a1a1a;
+    margin-bottom: 0.4rem;
+  }
+
+  .interview-card .q-text {
+    font-size: 11px;
+    color: var(--muted);
+    margin-bottom: 0.55rem;
+    line-height: 1.4;
+  }
+
+  .interview-card .a-text {
+    font-size: 12.5px;
+    color: var(--text);
+    font-weight: 500;
+    line-height: 1.5;
+  }
+
+  /* Comments */
+  .comments-panel { grid-column: 1 / -1; }
+
+  .comment-list { display: flex; flex-direction: column; gap: 0.75rem; }
+
+  .comment-item {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-left: 3px solid #1a1a1a;
+    border-radius: 0 8px 8px 0;
+    padding: 0.85rem 1rem;
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+  }
+
+  .comment-meta {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--muted);
+    min-width: 80px;
+    line-height: 1.6;
+  }
+
+  .comment-text {
+    font-size: 12.5px;
+    color: var(--text);
+    line-height: 1.5;
+    flex: 1;
+  }
+
+  /* Insight boxes */
+  .insights-panel { grid-column: 1 / -1; }
+
+  .insights-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+  }
+
+  .insight-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.25rem;
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+  }
+
+  .insight-icon {
+    font-size: 1.8rem;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+
+  .insight-box h4 {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 0.35rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  .insight-box p {
+    font-size: 11.5px;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  /* ─── RESPONSIVE ──────────────────────────────────────── */
+  @media (max-width: 900px) {
+    .stat-row { grid-template-columns: repeat(2, 1fr); }
+    .interview-grid { grid-template-columns: 1fr 1fr; }
+    .insights-grid { grid-template-columns: 1fr 1fr; }
+    .donut-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  @media (max-width: 600px) {
+    main { padding: 1rem 1rem 3rem; }
+    header { padding: 1.5rem 1rem 1rem; }
+    .stat-row { grid-template-columns: 1fr 1fr; }
+    .interview-grid { grid-template-columns: 1fr; }
+    .insights-grid { grid-template-columns: 1fr; }
+  }
+
+  /* animate in */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .panel, .stat-card, .interview-card, .comment-item, .insight-box {
+    animation: fadeUp 0.5s ease both;
+  }
+
+  .panel:nth-child(2)  { animation-delay: 0.05s; }
+  .panel:nth-child(3)  { animation-delay: 0.1s; }
+  .panel:nth-child(4)  { animation-delay: 0.15s; }
+
+  /* wide panels */
+  .col-full  { grid-column: 1 / -1; }
+  .col-8     { grid-column: span 8; }
+  .col-4     { grid-column: span 4; }
+  .col-6     { grid-column: span 6; }
+  .col-5     { grid-column: span 5; }
+  .col-7     { grid-column: span 7; }
+
+  @media (max-width: 900px) {
+    .col-8, .col-4, .col-6, .col-5, .col-7 { grid-column: 1 / -1; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <div class="brand-pill">🍗 Pollos Cyro's · I Semestre 2026</div>
+    <h1>CAMBIO <span>ORGANIZA-</span><br>CIONAL</h1>
+  </div>
+  <div class="header-meta">
+    Encuesta de Actitudes — 6 respuestas<br>
+    Entrevista — Karol Haughton<br>
+    Fecha de recolección: 30 abril 2026<br>
+    TEC · Gestión de Talento Humano II
+  </div>
+</header>
+
+<main>
+
+  <!-- ── KPIs ───────────────────────────────────────── -->
+  <div class="stat-row">
+    <div class="stat-card yellow">
+      <div class="stat-label">Respuestas totales</div>
+      <div class="stat-value">6</div>
+      <div class="stat-sub">Colaboradores encuestados</div>
+    </div>
+    <div class="stat-card teal">
+      <div class="stat-label">Disposición al cambio</div>
+      <div class="stat-value">100%</div>
+      <div class="stat-sub">Totalmente de acuerdo (P5)</div>
+    </div>
+    <div class="stat-card orange">
+      <div class="stat-label">Áreas representadas</div>
+      <div class="stat-value">2</div>
+      <div class="stat-sub">Producción · Ventas</div>
+    </div>
+    <div class="stat-card purple">
+      <div class="stat-label">Participación en actividades</div>
+      <div class="stat-value">67%</div>
+      <div class="stat-sub">4 de 6 dijeron Sí</div>
+    </div>
+  </div>
+
+  <!-- ── SECTION: ESCALA LIKERT ─────────────────────── -->
+  <div class="section-title col-full">
+    <h2>ESCALA LIKERT — ACTITUDES</h2>
+    <div class="line"></div>
+    <div class="tag">Ítems P1–P5 · n=6</div>
+  </div>
+
+  <div class="panel col-full">
+    <div class="panel-title">Distribución de respuestas por ítem</div>
+    <div class="legend">
+      <div class="legend-item"><div class="legend-dot" style="background:#1a1a1a"></div>Totalmente de acuerdo</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#555"></div>De acuerdo</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#999"></div>Neutral</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#ccc"></div>En desacuerdo</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#e0ddd8;border:1px solid #bbb"></div>Totalmente en desacuerdo</div>
+    </div>
+    <div class="likert-chart" id="likertChart"></div>
+  </div>
+
+  <!-- ── SECTION: PERFIL DEMOGRÁFICO ───────────────── -->
+  <div class="section-title col-full">
+    <h2>PERFIL DEMOGRÁFICO</h2>
+    <div class="line"></div>
+    <div class="tag">Área · Antigüedad · Edad</div>
+  </div>
+
+  <div class="panel col-4">
+    <div class="panel-title">Área de trabajo</div>
+    <div class="donut-grid">
+      <div class="donut-item">
+        <div class="donut-wrap">
+          <svg viewBox="0 0 90 90">
+            <circle cx="45" cy="45" r="35" fill="none" stroke="#e8e5e0" stroke-width="14"/>
+            <circle cx="45" cy="45" r="35" fill="none" stroke="#1a1a1a" stroke-width="14"
+              stroke-dasharray="132 88" stroke-dashoffset="0" stroke-linecap="butt"
+              transform="rotate(-90 45 45)"/>
+          </svg>
+          <div class="donut-center" style="color:#1a1a1a">4</div>
+        </div>
+        <div class="donut-label">Producción<br><span style="color:#1a1a1a;font-weight:700">67%</span></div>
+      </div>
+      <div class="donut-item">
+        <div class="donut-wrap">
+          <svg viewBox="0 0 90 90">
+            <circle cx="45" cy="45" r="35" fill="none" stroke="#e8e5e0" stroke-width="14"/>
+            <circle cx="45" cy="45" r="35" fill="none" stroke="#888" stroke-width="14"
+              stroke-dasharray="66 154" stroke-dashoffset="0" stroke-linecap="butt"
+              transform="rotate(-90 45 45)"/>
+          </svg>
+          <div class="donut-center" style="color:#888">2</div>
+        </div>
+        <div class="donut-label">Ventas<br><span style="color:#555;font-weight:700">33%</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel col-4">
+    <div class="panel-title">Antigüedad en la empresa</div>
+    <div class="hbar-chart" id="antiguedadChart"></div>
+  </div>
+
+  <div class="panel col-4">
+    <div class="panel-title">Rango de edad</div>
+    <div class="hbar-chart" id="edadChart"></div>
+  </div>
+
+  <!-- ── SECTION: PARTICIPACIÓN ─────────────────────── -->
+  <div class="section-title col-full">
+    <h2>PARTICIPACIÓN EN ACTIVIDADES DE CAMBIO</h2>
+    <div class="line"></div>
+    <div class="tag">P6</div>
+  </div>
+
+  <div class="panel col-6">
+    <div class="panel-title">¿Ha participado en actividades de cambio?</div>
+    <div style="display:flex;align-items:center;gap:2rem;flex-wrap:wrap;margin-top:0.5rem;">
+      <div>
+        <svg width="140" height="140" viewBox="0 0 140 140">
+          <circle cx="70" cy="70" r="55" fill="none" stroke="#e8e5e0" stroke-width="22"/>
+          <!-- Sí: 4/6 = 66.7% = 230deg ~ dasharray 230 -->
+          <circle cx="70" cy="70" r="55" fill="none" stroke="#1a1a1a" stroke-width="22"
+            stroke-dasharray="230 115" stroke-dashoffset="-30"
+            stroke-linecap="butt" transform="rotate(-90 70 70)"/>
+          <!-- No: 2/6 = 33.3% -->
+          <circle cx="70" cy="70" r="55" fill="none" stroke="#aaa" stroke-width="22"
+            stroke-dasharray="115 230" stroke-dashoffset="-260"
+            stroke-linecap="butt" transform="rotate(-90 70 70)"/>
+          <text x="70" y="66" text-anchor="middle" font-family="'Playfair Display'" font-size="26" fill="#1a1a1a">67%</text>
+          <text x="70" y="82" text-anchor="middle" font-family="'Source Sans 3'" font-size="11" fill="#888">Sí</text>
+        </svg>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:0.75rem;">
+        <div>
+          <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.25rem;">
+            <div style="width:12px;height:12px;background:#1a1a1a;border-radius:3px"></div>
+            <span style="font-size:12px;color:var(--text)">Sí participaron</span>
+          </div>
+          <div style="font-family:var(--font-display);font-size:2rem;color:#1a1a1a">4 <span style="font-size:1rem;color:var(--muted)">personas</span></div>
+        </div>
+        <div>
+          <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.25rem;">
+            <div style="width:12px;height:12px;background:#aaa;border-radius:3px"></div>
+            <span style="font-size:12px;color:var(--text)">No participaron</span>
+          </div>
+          <div style="font-family:var(--font-display);font-size:2rem;color:#888">2 <span style="font-size:1rem;color:var(--muted)">personas</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel col-6">
+    <div class="panel-title">Scorecard de actitudes por ítem — promedio ponderado</div>
+    <div id="scorecardChart" style="margin-top:0.5rem;display:flex;flex-direction:column;gap:0.7rem;"></div>
+  </div>
+
+  <!-- ── SECTION: ENTREVISTA ─────────────────────────── -->
+  <div class="section-title col-full">
+    <h2>ENTREVISTA — KAROL HAUGHTON</h2>
+    <div class="line"></div>
+    <div class="tag">Gestión del personal · 13 años · Pollos Cyro's</div>
+  </div>
+
+  <div class="panel interview-panel col-full">
+    <div class="panel-title">Hallazgos cualitativos por bloque temático</div>
+    <div class="interview-grid" id="interviewGrid"></div>
+  </div>
+
+  <!-- ── SECTION: COMENTARIOS ───────────────────────── -->
+  <div class="section-title col-full">
+    <h2>COMENTARIOS ABIERTOS</h2>
+    <div class="line"></div>
+    <div class="tag">Pregunta abierta · Encuesta</div>
+  </div>
+
+  <div class="panel comments-panel col-full">
+    <div class="panel-title">Experiencias y percepciones de colaboradores</div>
+    <div class="comment-list" id="commentList"></div>
+  </div>
+
+  <!-- ── SECTION: INSIGHTS ──────────────────────────── -->
+  <div class="section-title col-full">
+    <h2>INSIGHTS CLAVE</h2>
+    <div class="line"></div>
+    <div class="tag">Síntesis analítica</div>
+  </div>
+
+  <div class="insights-panel col-full">
+    <div class="insights-grid" id="insightsGrid"></div>
+  </div>
+
+</main>
+
+<script>
+// ── DATA ──────────────────────────────────────────────────────
+
+const likertData = [
+  {
+    label: "P1 · Los cambios en la empresa son necesarios para mejorar",
+    ta: 5, da: 1, n: 0, ed: 0, ted: 0
+  },
+  {
+    label: "P2 · Tengo claro en qué consisten los cambios propuestos",
+    ta: 4, da: 2, n: 0, ed: 0, ted: 0
+  },
+  {
+    label: "P3 · Me siento motivado/a ante los cambios implementados",
+    ta: 4, da: 2, n: 0, ed: 0, ted: 0
+  },
+  {
+    label: "P4 · Siento preocupación o incertidumbre ante los cambios",
+    ta: 1, da: 3, n: 0, ed: 0, ted: 2
+  },
+  {
+    label: "P5 · Estoy dispuesto/a a colaborar activamente con los cambios",
+    ta: 6, da: 0, n: 0, ed: 0, ted: 0
+  }
+];
+
+const antiguedadData = [
+  { label: "Menos de 1 año", n: 1 },
+  { label: "1-3 años", n: 3 },
+  { label: "4-6 años", n: 1 },
+  { label: "Más de 6 años", n: 1 }
+];
+
+const edadData = [
+  { label: "25-34 años", n: 2 },
+  { label: "35-44 años", n: 2 },
+  { label: "45 años o más", n: 2 }
+];
+
+const interviewItems = [
+  { bloque: "Bloque 1", q: "¿Cómo define el cambio organizacional?", a: "Lo describe como algo caótico durante la adaptación, orientado a ordenar y retirar en el punto de atención." },
+  { bloque: "Bloque 2", q: "¿Por qué ocurren los cambios?", a: "Para educar al cliente, lograr el pago previo al consumo, evitar pérdidas y malentendidos." },
+  { bloque: "Bloque 2", q: "¿Quiénes impulsan los cambios?", a: "Las compañeras colaboradoras." },
+  { bloque: "Bloque 3", q: "¿Con qué frecuencia ocurren los cambios?", a: "Ocasionalmente." },
+  { bloque: "Bloque 3", q: "¿Cuánto duran los procesos de cambio?", a: "Menos de 1 mes." },
+  { bloque: "Bloque 4", q: "¿Cómo fue el liderazgo durante el cambio?", a: "La dirección envió instrucciones y los colaboradores las acataron; se repetían ocasionalmente para reforzar." },
+  { bloque: "Bloque 4", q: "¿Fue efectiva la comunicación?", a: "Sí, la considera muy efectiva." },
+  { bloque: "Bloque 4", q: "¿Cuáles fueron las principales barreras?", a: "La costumbre tanto de los clientes como de los propios colaboradores." },
+  { bloque: "Bloque 5", q: "Recomendaciones para mejorar", a: "Más rotulación correcta y visible para los clientes en los puntos de venta." }
+];
+
+const comments = [
+  { area: "Producción", antiguedad: "+6 años", text: "Todo bien" },
+  { area: "Producción", antiguedad: "-1 año",  text: "Cambio para mejorar, más orden y evita malos entendidos." },
+  { area: "Producción", antiguedad: "1-3 años", text: "Un poco de presión ya que padece del corazón; los colaboradores lo animan mucho." },
+  { area: "Producción", antiguedad: "4-6 años", text: "Clientes molestos y presión." },
+  { area: "Ventas",     antiguedad: "1-3 años", text: "Clientes molestos y agresivos ante el cambio. Se siente el estrés y miedo de los colaboradores ante las reacciones del consumidor." },
+  { area: "Ventas",     antiguedad: "1-3 años", text: "Los clientes al inicio no aceptaban los cambios, pero los colaboradores sí estaban emocionados por el cambio." }
+];
+
+const insights = [
+  { icon: "✅", title: "Alta disposición interna", text: "El 100% de los encuestados está totalmente dispuesto a colaborar con los cambios (P5), lo que refleja un equipo comprometido y alineado con la dirección." },
+  { icon: "⚠️", title: "Resistencia externa, no interna", text: "La principal barrera identificada (entrevista + comentarios) es la resistencia de los clientes, no de los colaboradores. Esto es un activo organizacional importante." },
+  { icon: "💡", title: "Necesidad de comunicación visual", text: "Tanto la entrevistada como los comentarios apuntan a la falta de rotulación y comunicación visual clara para los clientes como área de mejora prioritaria." },
+  { icon: "😰", title: "Estrés laboral como factor de riesgo", text: "Varios colaboradores mencionan presión y estrés generado por las reacciones agresivas de algunos clientes. Gestionar este impacto emocional es clave." },
+  { icon: "🔄", title: "Cambios rápidos y puntuales", text: "Los procesos de cambio son cortos (menos de 1 mes) y ocurren ocasionalmente, lo que sugiere una organización ágil aunque con capacidad de planificación mejorable." },
+  { icon: "📣", title: "Liderazgo directivo efectivo", text: "El estilo de liderazgo durante el cambio fue directivo (instrucciones enviadas y acatadas), calificado como muy efectivo, lo que facilitó la adopción rápida." }
+];
+
+// ── RENDER FUNCTIONS ──────────────────────────────────────────
+
+function renderLikert() {
+  const total = 6;
+  const container = document.getElementById('likertChart');
+  container.innerHTML = '';
+  likertData.forEach(item => {
+    const row = document.createElement('div');
+    row.className = 'likert-row';
+
+    const pctTA  = (item.ta  / total * 100).toFixed(0);
+    const pctDA  = (item.da  / total * 100).toFixed(0);
+    const pctN   = (item.n   / total * 100).toFixed(0);
+    const pctED  = (item.ed  / total * 100).toFixed(0);
+    const pctTED = (item.ted / total * 100).toFixed(0);
+    const pctPos = ((item.ta + item.da) / total * 100).toFixed(0);
+
+    row.innerHTML = `
+      <div class="likert-label">${item.label}</div>
+      <div class="likert-bar-wrap">
+        <div class="likert-bar-bg">
+          ${item.ta  ? `<div class="likert-seg seg-ta"  style="width:${pctTA}%">${pctTA}%</div>` : ''}
+          ${item.da  ? `<div class="likert-seg seg-da"  style="width:${pctDA}%">${pctDA}%</div>` : ''}
+          ${item.n   ? `<div class="likert-seg seg-n"   style="width:${pctN}%">${pctN}%</div>` : ''}
+          ${item.ed  ? `<div class="likert-seg seg-ed"  style="width:${pctED}%">${pctED}%</div>` : ''}
+          ${item.ted ? `<div class="likert-seg seg-ted" style="width:${pctTED}%">${pctTED}%</div>` : ''}
+        </div>
+        <div class="likert-pct">${pctPos}% pos.</div>
+      </div>
+    `;
+    container.appendChild(row);
+  });
+}
+
+function renderHbar(containerId, data, maxN, color) {
+  const container = document.getElementById(containerId);
+  container.innerHTML = '';
+  data.forEach(item => {
+    const pct = (item.n / maxN * 100).toFixed(0);
+    const div = document.createElement('div');
+    div.className = 'hbar-row';
+    div.innerHTML = `
+      <div class="hbar-label">${item.label} <span>${item.n} personas</span></div>
+      <div class="hbar-bg">
+        <div class="hbar-fill" style="width:${pct}%;background:${color}"></div>
+      </div>
+    `;
+    container.appendChild(div);
+  });
+}
+
+function renderScorecard() {
+  // Score: TA=5, DA=4, N=3, ED=2, TED=1
+  const scores = likertData.map(item => {
+    const total = item.ta + item.da + item.n + item.ed + item.ted;
+    const score = (item.ta*5 + item.da*4 + item.n*3 + item.ed*2 + item.ted*1) / total;
+    return { label: item.label.split('·')[0].trim(), score };
+  });
+  const container = document.getElementById('scorecardChart');
+  container.innerHTML = '';
+  scores.forEach(item => {
+    const pct = ((item.score - 1) / 4 * 100).toFixed(0);
+    const col = item.score >= 4.5 ? '#1a1a1a' : item.score >= 3.5 ? '#555' : '#999';
+    const div = document.createElement('div');
+    div.className = 'hbar-row';
+    div.innerHTML = `
+      <div class="hbar-label">${item.label} <span style="color:${col};font-weight:700">${item.score.toFixed(2)} / 5</span></div>
+      <div class="hbar-bg">
+        <div class="hbar-fill" style="width:${pct}%;background:${col}"></div>
+      </div>
+    `;
+    container.appendChild(div);
+  });
+}
+
+function renderInterview() {
+  const grid = document.getElementById('interviewGrid');
+  grid.innerHTML = '';
+  interviewItems.forEach(item => {
+    const card = document.createElement('div');
+    card.className = 'interview-card';
+    card.innerHTML = `
+      <div class="q-tag">${item.bloque}</div>
+      <div class="q-text">${item.q}</div>
+      <div class="a-text">${item.a}</div>
+    `;
+    grid.appendChild(card);
+  });
+}
+
+function renderComments() {
+  const list = document.getElementById('commentList');
+  list.innerHTML = '';
+  comments.forEach(c => {
+    const item = document.createElement('div');
+    item.className = 'comment-item';
+    item.innerHTML = `
+      <div class="comment-meta">${c.area}<br>${c.antiguedad}</div>
+      <div class="comment-text">${c.text}</div>
+    `;
+    list.appendChild(item);
+  });
+}
+
+function renderInsights() {
+  const grid = document.getElementById('insightsGrid');
+  grid.innerHTML = '';
+  insights.forEach(ins => {
+    const box = document.createElement('div');
+    box.className = 'insight-box';
+    box.innerHTML = `
+      <div class="insight-icon">${ins.icon}</div>
+      <div>
+        <h4>${ins.title}</h4>
+        <p>${ins.text}</p>
+      </div>
+    `;
+    grid.appendChild(box);
+  });
+}
+
+// ── INIT ──────────────────────────────────────────────────────
+renderLikert();
+renderHbar('antiguedadChart', antiguedadData, 3, '#444');
+renderHbar('edadChart', edadData, 2, '#777');
+renderScorecard();
+renderInterview();
+renderComments();
+renderInsights();
+</script>
+</body>
+</html>
